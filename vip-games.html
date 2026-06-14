@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Games - Score X Fixed</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-soccer-ball"></i>
+                    <h1>Score X Fixed</h1>
+                </div>
+                <div class="header-info">
+                    <button class="admin-btn" onclick="checkAdmin()">
+                        <i class="fas fa-lock"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Title -->
+            <section class="page-header">
+                <h2>VIP Premium Predictions</h2>
+                <p>Exclusive High-Confidence Football Picks</p>
+            </section>
+
+            <!-- VIP Badge -->
+            <section class="vip-banner">
+                <div class="vip-content">
+                    <i class="fas fa-crown"></i>
+                    <h3>Premium VIP Predictions</h3>
+                    <p>Get access to our most confident picks and expert analysis</p>
+                </div>
+            </section>
+
+            <!-- Games List -->
+            <section class="games-section">
+                <div class="section-header">
+                    <h3>VIP Games</h3>
+                    <div class="filter-controls">
+                        <input type="text" id="searchInput" placeholder="Search games..." class="search-input">
+                    </div>
+                </div>
+                <div class="games-container" id="vipGamesList">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Loading games...
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="free-games.html" class="nav-item">
+                <i class="fas fa-gift"></i>
+                <span>Free</span>
+            </a>
+            <a href="vip-games.html" class="nav-item active">
+                <i class="fas fa-crown"></i>
+                <span>VIP</span>
+            </a>
+            <a href="history.html" class="nav-item">
+                <i class="fas fa-history"></i>
+                <span>History</span>
+            </a>
+            <a href="support.html" class="nav-item">
+                <i class="fas fa-message"></i>
+                <span>Support</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Modal for Game Details -->
+    <div class="modal" id="gameModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Load VIP games
+        loadVIPGames();
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const games = document.querySelectorAll('.game-card');
+            games.forEach(game => {
+                const text = game.textContent.toLowerCase();
+                game.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>
