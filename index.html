@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Score X Fixed - Football Predictions</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-soccer-ball"></i>
+                    <h1>Score X Fixed</h1>
+                </div>
+                <div class="header-info">
+                    <span class="date" id="currentDate"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Banner -->
+            <section class="welcome-banner">
+                <div class="banner-content">
+                    <h2>Welcome to Score X Fixed</h2>
+                    <p>Your #1 Source for Football Predictions</p>
+                    <div class="banner-stats">
+                        <div class="stat">
+                            <h3 id="totalGames">0</h3>
+                            <p>Active Games</p>
+                        </div>
+                        <div class="stat">
+                            <h3 id="winRate">0%</h3>
+                            <p>Win Rate</p>
+                        </div>
+                        <div class="stat">
+                            <h3 id="totalUsers">1000+</h3>
+                            <p>Users</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Latest Games Section -->
+            <section class="games-section">
+                <h2>Latest Predictions</h2>
+                <div class="games-container" id="latestGames">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Loading games...
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Navigation -->
+            <section class="quick-nav">
+                <h2>Quick Navigation</h2>
+                <div class="nav-grid">
+                    <div class="nav-card" onclick="window.location.href='free-games.html'">
+                        <i class="fas fa-gift"></i>
+                        <h3>Free Predictions</h3>
+                        <p>Daily Free Games</p>
+                    </div>
+                    <div class="nav-card" onclick="window.location.href='vip-games.html'">
+                        <i class="fas fa-crown"></i>
+                        <h3>VIP Predictions</h3>
+                        <p>Premium Picks</p>
+                    </div>
+                    <div class="nav-card" onclick="window.location.href='correct-score.html'">
+                        <i class="fas fa-crosshairs"></i>
+                        <h3>Correct Score</h3>
+                        <p>Exact Predictions</p>
+                    </div>
+                    <div class="nav-card" onclick="window.location.href='history.html'">
+                        <i class="fas fa-history"></i>
+                        <h3>Results History</h3>
+                        <p>Past Winners</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Announcements -->
+            <section class="announcements">
+                <h2>Latest News</h2>
+                <div class="announcements-container" id="announcementsList">
+                    <div class="announcement-card">
+                        <h3>Welcome to Score X Fixed</h3>
+                        <p>Your trusted source for accurate football predictions. Check back daily for new picks!</p>
+                        <span class="announcement-date">Today</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="free-games.html" class="nav-item">
+                <i class="fas fa-gift"></i>
+                <span>Free</span>
+            </a>
+            <a href="vip-games.html" class="nav-item">
+                <i class="fas fa-crown"></i>
+                <span>VIP</span>
+            </a>
+            <a href="history.html" class="nav-item">
+                <i class="fas fa-history"></i>
+                <span>History</span>
+            </a>
+            <a href="support.html" class="nav-item">
+                <i class="fas fa-message"></i>
+                <span>Support</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Update current date
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+
+        // Load latest games on home page
+        loadLatestGames();
+        loadAnnouncements();
+    </script>
+</body>
+</html>
