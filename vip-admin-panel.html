@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Score Management - Admin Panel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/vip-system.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .admin-main {
+            padding: 20px;
+        }
+
+        .admin-table {
+            background: var(--primary-color);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1.5fr 1fr;
+            gap: 15px;
+            padding: 15px;
+            background: var(--secondary-color);
+            border-bottom: 2px solid var(--border-color);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1.5fr 1fr;
+            gap: 15px;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            transition: background 0.2s ease;
+        }
+
+        .table-row:hover {
+            background: var(--secondary-color);
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-cell {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .table-cell.actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-edit {
+            background: var(--lock-color);
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+        .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(251, 191, 36, 0.3);
+        }
+
+        .btn-delete {
+            background: var(--danger-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .no-data {
+            padding: 30px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transform: translateX(400px);
+            transition: all 0.3s ease;
+            z-index: 2000;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .notification-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .notification-error {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .vip-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--secondary-color);
+            border-radius: 8px;
+        }
+
+        .vip-section h3 {
+            margin-top: 0;
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 768px) {
+            .table-header,
+            .table-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .table-header .table-cell:nth-child(3),
+            .table-row .table-cell:nth-child(3),
+            .table-header .table-cell:nth-child(4),
+            .table-row .table-cell:nth-child(4) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container admin-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-crown"></i>
+                    <h1>VIP Score Management</h1>
+                </div>
+                <div class="header-info">
+                    <button class="logout-btn" onclick="window.location.href='admin.html'">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <div class="vip-section">
+                <h3>Manage VIP Scores</h3>
+                <p>Add, edit, or delete VIP scores that will be locked and require payment to view.</p>
+                <button class="btn btn-primary" onclick="VIPAdmin.openAddScoreModal()">
+                    <i class="fas fa-plus"></i> Add VIP Score
+                </button>
+            </div>
+
+            <!-- Scores List -->
+            <div id="vipScoresList" class="admin-table">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading scores...
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Score Modal -->
+    <div class="modal" id="vipScoreModal">
+        <div class="modal-content">
+            <span class="close" onclick="VIPAdmin.closeScoreModal()">&times;</span>
+            <h3 id="vipScoreModalTitle">Add VIP Score</h3>
+            
+            <form id="vipScoreForm">
+                <div class="form-group">
+                    <label for="vipScoreMatchId">Match ID</label>
+                    <input type="text" id="vipScoreMatchId" class="form-input" required>
+                    <small>Unique identifier for the match</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="vipScoreValue">Score Prediction</label>
+                    <input type="text" id="vipScoreValue" class="form-input" placeholder="e.g., 2-1, Over 2.5" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="vipScoreConfidence">Confidence Level (%)</label>
+                    <input type="number" id="vipScoreConfidence" class="form-input" min="0" max="100" value="75">
+                </div>
+                
+                <div class="form-group">
+                    <label for="vipScoreMatchTime">Match Time</label>
+                    <input type="datetime-local" id="vipScoreMatchTime" class="form-input">
+                </div>
+                
+                <div class="form-group">
+                    <label for="vipScoreAnalysis">Analysis Notes</label>
+                    <textarea id="vipScoreAnalysis" class="form-input" rows="3" placeholder="Detailed analysis for VIP members"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Score
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/vip-system.js"></script>
+    <script src="js/vip-admin.js"></script>
+</body>
+</html>
